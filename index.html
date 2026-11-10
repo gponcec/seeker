@@ -103,9 +103,13 @@
             <i class="fa-solid fa-plus text-sm"></i>
           </button>
 
-          <button onclick="importCSV(event)" class="w-9 h-9 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors" title="Importar CSV">
-            <i class="fa-solid fa-file-csv text-emerald-600 dark:text-emerald-400"></i>            
+          <!-- Botón de Importar corregido -->
+          <button onclick="document.getElementById('csvFileInput').click()" class="w-9 h-9 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors" title="Importar CSV">
+            <i class="fa-solid fa-file-csv text-emerald-400"></i>            
           </button>
+
+          <!-- Input de tipo archivo oculto -->
+          <input type="file" id="csvFileInput" accept=".csv" class="hidden" onchange="importCSV(event)">
         </div>
       </div>
 
