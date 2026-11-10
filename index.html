@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wiki Preguntas y Respuestas</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              500: '#0284c7',
+              600: '#0284c7',
+              700: '#0369a1',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Estilos personalizados para animaciones y scrollbar */
+    .accordion-content {
+      transition: max-height 0.3s ease-out, opacity 0.25s ease-out;
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+    }
+    .accordion-content.open {
+      max-height: 500px;
+      opacity: 1;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(156, 163, 175, 0.4);
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-sans min-h-screen flex flex-col items-center justify-center p-0 sm:p-4 transition-colors duration-200">
+
+  <!-- Switch de Simulación de Dispositivo (Solo visible en pantallas medianas/grandes) -->
+  <div class="hidden sm:flex items-center gap-4 mb-4 bg-white dark:bg-slate-800 px-4 py-2 rounded-full shadow-sm text-sm border border-slate-200 dark:border-slate-700">
+    <span class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Modo de vista:</span>
+    <button id="toggleFrameBtn" onclick="toggleMobileFrame()" class="flex items-center gap-2 text-brand-600 dark:text-brand-400 font-medium hover:underline">
+      <i class="fa-solid fa-mobile-screen"></i> <span>Cambiar Marco Móvil / Pantalla Completa</span>
+    </button>
+  </div>
+
+  <!-- Contenedor Principal / Marco de Teléfono Celular -->
+  <div id="appContainer" class="w-full max-w-md bg-white dark:bg-slate-800 sm:rounded-[40px] shadow-2xl border-0 sm:border-[8px] border-slate-800 dark:border-slate-700 h-screen sm:h-[844px] flex flex-col overflow-hidden relative transition-all duration-300">
+    
+    <!-- Barra del Sistema Móvil (Notch & Status bar simulation) -->
+    <div class="bg-brand-600 dark:bg-slate-900 text-white px-6 pt-3 pb-2 flex justify-between items-center text-xs font-semibold shrink-0 select-none">
+      <span id="currentTime">09:41</span>
+      <!-- Speaker Notch -->
+      <div class="hidden sm:block w-20 h-4 bg-slate-800 dark:bg-slate-700 rounded-b-xl -mt-3"></div>
+      <div class="flex items-center space-x-1.5">
+        <i class="fa-solid fa-signal"></i>
+        <i class="fa-solid fa-wifi"></i>
+        <i class="fa-solid fa-battery-full"></i>
+      </div>
+    </div>
+
+    <!-- Encabezado de la App -->
+    <header class="bg-brand-600 dark:bg-slate-900 text-white px-5 pb-4 pt-1 shadow-md shrink-0">
+      <div class="flex justify-between items-center mb-3">
+        <div class="flex items-center space-x-2">
+          <div class="bg-white/20 p-2 rounded-xl backdrop-blur-sm">
+            <i class="fa-solid fa-book-open text-lg"></i>
+          </div>
+          <div>
+            <h1 class="font-bold text-lg leading-tight">Wiki FAQ</h1>
+            <p class="text-[11px] text-brand-100 opacity-90" id="totalCount">0 preguntas cargadas</p>
+          </div>
+        </div>
+
+        <!-- Botones de Acción Superior (Tema / Opciones) -->
+        <div class="flex items-center space-x-1">
+          <button onclick="toggleDarkMode()" class="w-9 h-9 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors" title="Cambiar tema">
+            <i id="themeIcon" class="fa-solid fa-moon text-sm"></i>
+          </button>
+          <button onclick="openModal('addModal')" class="w-9 h-9 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors" title="Agregar pregunta">
+            <i class="fa-solid fa-plus text-sm"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Buscador Simple en Tiempo Real -->
+      <div class="relative">
+        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+        <input 
+          type="text" 
+          id="searchInput" 
+          placeholder="Buscar pregunta o palabra clave..." 
+          oninput="handleSearch()"
+          class="w-full pl-10 pr-9 py-2.5 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 placeholder-slate-400 rounded-xl text-sm outline-none focus:ring-2 focus:ring-white/50 shadow-inner transition-all"
+        />
+        <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Barra de Herramientas Rápidas (Importar CSV / Exportar) -->
+    <div class="bg-slate-50 dark:bg-slate-800/50 px-4 py-2 border-b border-slate-200 dark:border-slate-700/60 flex justify-between items-center text-xs shrink-0">
+      <div class="flex gap-2">
+        <label class="cursor-pointer bg-white dark:bg-slate-700 hover:bg-slate-100 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-600 flex items-center gap-1.5 font-medium transition-colors shadow-sm">
+          <i class="fa-solid fa-file-csv text-emerald-600 dark:text-emerald-400"></i>
+          <span>Importar CSV</span>
+          <input type="file" id="csvFileInput" accept=".csv" onchange="importCSV(event)" class="hidden">
+        </label>
+        
+        <button onclick="exportCSV()" class="bg-white dark:bg-slate-700 hover:bg-slate-100 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-600 flex items-center gap-1.5 font-medium transition-colors shadow-sm">
+          <i class="fa-solid fa-download text-blue-500"></i>
+          <span>Exportar</span>
+        </button>
+      </div>
+
+      <button onclick="resetDefaultData()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1.5" title="Restaurar datos de ejemplo">
+        <i class="fa-solid fa-rotate-right"></i>
+      </button>
+    </div>
+
+    <!-- Lista de Preguntas y Respuestas (Acordeón Scrollable) -->
+    <main class="flex-1 overflow-y-auto p-4 custom-scrollbar space-y-3" id="faqList">
+      <!-- Las preguntas se renderizarán dinámicamente aquí -->
+    </main>
+
+    <!-- Estado Vacío (Sin resultados) -->
+    <div id="emptyState" class="hidden flex-1 flex flex-col items-center justify-center p-6 text-center">
+      <div class="w-16 h-16 bg-slate-100 dark:bg-slate-700/50 rounded-full flex items-center justify-center text-slate-400 mb-3">
+        <i class="fa-solid fa-folder-open text-2xl"></i>
+      </div>
+      <h3 class="font-medium text-slate-700 dark:text-slate-200 mb-1">Sin resultados</h3>
+      <p class="text-xs text-slate-500 dark:text-slate-400 max-w-[200px]" id="emptyStateText">No se encontraron preguntas que coincidan con la búsqueda.</p>
+    </div>
+
+    <!-- Barra Inferior de Navegación Móvil -->
+    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 px-6 py-2 flex justify-around items-center shrink-0">
+      <button onclick="filterCategory('all')" id="navAll" class="flex flex-col items-center gap-0.5 text-brand-600 dark:text-brand-400 font-medium">
+        <i class="fa-solid fa-list-ul text-base"></i>
+        <span class="text-[10px]">Todas</span>
+      </button>
+      <button onclick="openModal('addModal')" class="flex flex-col items-center gap-0.5 text-slate-400 hover:text-brand-600 dark:hover:text-brand-400">
+        <i class="fa-solid fa-circle-plus text-base"></i>
+        <span class="text-[10px]">Nueva</span>
+      </button>
+      <button onclick="openModal('infoModal')" class="flex flex-col items-center gap-0.5 text-slate-400 hover:text-brand-600 dark:hover:text-brand-400">
+        <i class="fa-solid fa-circle-info text-base"></i>
+        <span class="text-[10px]">Info CSV</span>
+      </button>
+    </footer>
+
+  </div>
+
+  <!-- Modal: Agregar Nueva Pregunta -->
+  <div id="addModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-slate-800 w-full max-w-sm rounded-2xl p-5 shadow-2xl border border-slate-200 dark:border-slate-700 transform transition-all">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+          <i class="fa-solid fa-plus-circle text-brand-600"></i> Agregar Pregunta
+        </h3>
+        <button onclick="closeModal('addModal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      <form id="addForm" onsubmit="handleAddQuestion(event)" class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Pregunta:</label>
+          <input type="text" id="newQuestion" required placeholder="Ej: ¿Cómo reiniciar la clave?" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-700/50 border border-slate-300 dark:border-slate-600 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 outline-none text-slate-800 dark:text-slate-100">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Respuesta:</label>
+          <textarea id="newAnswer" required rows="4" placeholder="Escribe aquí la respuesta detallada..." class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-700/50 border border-slate-300 dark:border-slate-600 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 outline-none text-slate-800 dark:text-slate-100 resize-none"></textarea>
+        </div>
+        <div class="flex gap-2 pt-2">
+          <button type="button" onclick="closeModal('addModal')" class="flex-1 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300 font-medium text-xs hover:bg-slate-100 dark:hover:bg-slate-700">Cancelar</button>
+          <button type="submit" class="flex-1 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-medium text-xs shadow-md shadow-brand-500/20">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Información y Formato CSV -->
+  <div id="infoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-slate-800 w-full max-w-sm rounded-2xl p-5 shadow-2xl border border-slate-200 dark:border-slate-700">
+      <div class="flex justify-between items-center mb-3">
+        <h3 class="font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+          <i class="fa-solid fa-file-csv text-emerald-500"></i> Formato de CSV
+        </h3>
+        <button onclick="closeModal('infoModal')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      <div class="text-xs text-slate-600 dark:text-slate-300 space-y-2">
+        <p>Para cargar un archivo CSV correctamente, asegúrate de que tenga 2 columnas encabezadas así:</p>
+        <div class="bg-slate-100 dark:bg-slate-900 p-2.5 rounded-lg font-mono text-[11px] text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800">
+          Pregunta,Respuesta<br>
+          "¿Qué es la app?","Es un wiki FAQ."<br>
+          "¿Cómo importar?","Usa el botón CSV."
+        </div>
+        <ul class="list-disc pl-4 space-y-1 text-[11px] text-slate-500 dark:text-slate-400">
+          <li>Acepta coma (<code>,</code>) o punto y coma (<code>;</code>) como separador.</li>
+          <li>Soporta comillas dobles para textos largos con saltos de línea.</li>
+        </ul>
+      </div>
+      <button onclick="closeModal('infoModal')" class="w-full mt-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-medium text-xs hover:bg-slate-200 dark:hover:bg-slate-600">Entendido</button>
+    </div>
+  </div>
+
+  <!-- Notificación Toast en la App -->
+  <div id="toast" class="absolute bottom-16 left-1/2 -translate-x-1/2 bg-slate-900/90 dark:bg-slate-100/90 text-white dark:text-slate-900 px-4 py-2 rounded-full text-xs font-medium shadow-lg transition-all duration-300 opacity-0 pointer-events-none z-40 flex items-center gap-2">
+    <i id="toastIcon" class="fa-solid fa-check text-emerald-400 dark:text-emerald-600"></i>
+    <span id="toastMsg">Mensaje</span>
+  </div>
+
+  <!-- JavaScript Logic -->
+  <script>
+    // Preguntas iniciales predeterminadas
+    const initialData = [
+      {
+        id: '1',
+        question: '¿Qué es esta aplicación de Wiki?',
+        answer: 'Es un aplicativo ligero para realizar consultas rápidas de preguntas y respuestas. Permite realizar búsquedas instantáneas e importar/exportar listas en formato CSV.'
+      },
+      {
+        id: '2',
+        question: '¿Cómo puedo importar mi propio archivo CSV?',
+        answer: 'Haz clic en el botón "Importar CSV" en la parte superior. Tu archivo debe contener al menos dos columnas llamadas "Pregunta" y "Respuesta".'
+      },
+      {
+        id: '3',
+        question: '¿Puedo usar la aplicación sin conexión a internet?',
+        answer: 'Sí, todo el almacenamiento y las búsquedas se realizan localmente en tu dispositivo utilizando LocalStorage.'
+      },
+      {
+        id: '4',
+        question: '¿Qué separadores son compatibles en el archivo CSV?',
+        answer: 'El lector automático detecta tanto comas (,) como puntos y comas (;), además de manejar comillas para textos con saltos de línea.'
+      },
+      {
+        id: '5',
+        question: '¿Cómo agregar una pregunta individualmente?',
+        answer: 'Presiona el botón de más (+) en la esquina superior derecha o en la barra inferior de navegación para abrir el formulario de creación.'
+      }
+    ];
+
+    let faqList = [];
+    let activeAccordion = null;
+
+    // Inicialización
+    document.addEventListener('DOMContentLoaded', () => {
+      loadData();
+      updateClock();
+      setInterval(updateClock, 30000);
+      
+      // Detectar preferencia de tema oscuro
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        toggleDarkMode(true);
+      }
+    });
+
+    // Cargar Datos (LocalStorage o Default)
+    function loadData() {
+      const saved = localStorage.getItem('wiki_faq_data');
+      if (saved) {
+        try {
+          faqList = JSON.parse(saved);
+        } catch (e) {
+          faqList = [...initialData];
+        }
+      } else {
+        faqList = [...initialData];
+        saveData();
+      }
+      renderFAQs(faqList);
+    }
+
+    // Guardar en LocalStorage
+    function saveData() {
+      localStorage.setItem('wiki_faq_data', JSON.stringify(faqList));
+      updateTotalCount();
+    }
+
+    // Renderizar la lista de FAQ
+    function renderFAQs(items) {
+      const container = document.getElementById('faqList');
+      const emptyState = document.getElementById('emptyState');
+      
+      container.innerHTML = '';
+      updateTotalCount();
+
+      if (items.length === 0) {
+        container.classList.add('hidden');
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      container.classList.remove('hidden');
+      emptyState.classList.add('hidden');
+
+      items.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'bg-white dark:bg-slate-700/60 rounded-xl border border-slate-200/80 dark:border-slate-700/80 shadow-sm overflow-hidden transition-all duration-200 hover:border-brand-300 dark:hover:border-slate-600';
+        
+        card.innerHTML = `
+          <button onclick="toggleAccordion('${item.id}')" class="w-full p-3.5 text-left flex justify-between items-start gap-3 select-none">
+            <span class="font-semibold text-sm text-slate-800 dark:text-slate-100 leading-snug">${escapeHtml(item.question)}</span>
+            <span id="icon-${item.id}" class="text-slate-400 transform transition-transform duration-200 shrink-0 mt-0.5">
+              <i class="fa-solid fa-chevron-down text-xs"></i>
+            </span>
+          </button>
+          <div id="content-${item.id}" class="accordion-content px-3.5 pb-0">
+            <div class="pt-1 pb-3 text-xs text-slate-600 dark:text-slate-300 border-t border-slate-100 dark:border-slate-600/50 leading-relaxed whitespace-pre-line">
+              ${escapeHtml(item.answer)}
+            </div>
+            <div class="flex justify-end pb-2.5 gap-2">
+              <button onclick="deleteQuestion('${item.id}')" class="text-[11px] text-rose-500 hover:text-rose-700 dark:hover:text-rose-400 font-medium px-2 py-1 rounded hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors">
+                <i class="fa-solid fa-trash-can mr-1"></i>Eliminar
+              </button>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // Toggle de Acordeón
+    function toggleAccordion(id) {
+      const content = document.getElementById(`content-${id}`);
+      const icon = document.getElementById(`icon-${id}`);
+      const isOpen = content.classList.contains('open');
+
+      // Cerrar otros acordeones abiertos si se desea (opcional)
+      document.querySelectorAll('.accordion-content').forEach(el => {
+        el.classList.remove('open');
+      });
+      document.querySelectorAll('[id^="icon-"]').forEach(el => {
+        el.classList.remove('rotate-180');
+      });
+
+      if (!isOpen) {
+        content.classList.add('open');
+        icon.classList.add('rotate-180');
+      }
+    }
+
+    // --- FUNCIONES DE BÚSQUEDA INTELIGENTE / TOLERANTE A ERRORES ---
+
+    /**
+     * Normaliza un texto: quita acentos/tildes, convierte a minúsculas y remueve caracteres especiales.
+     */
+    function normalizeText(text) {
+      if (!text) return '';
+      return text
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "") // Remueve acentos
+        .replace(/[^\w\s]/gi, '');     // Remueve signos de puntuación
+    }
+
+    /**
+     * Calcula la Distancia de Levenshtein entre dos cadenas para medir la similitud (ediciones requeridas).
+     */
+    function levenshteinDistance(a, b) {
+      if (a.length === 0) return b.length;
+      if (b.length === 0) return a.length;
+
+      const matrix = [];
+
+      for (let i = 0; i <= b.length; i++) {
+        matrix[i] = [i];
+      }
+
+      for (let j = 0; j <= a.length; j++) {
+        matrix[0][j] = j;
+      }
+
+      for (let i = 1; i <= b.length; i++) {
+        for (let j = 1; j <= a.length; j++) {
+          if (b.charAt(i - 1) === a.charAt(j - 1)) {
+            matrix[i][j] = matrix[i - 1][j - 1];
+          } else {
+            matrix[i][j] = Math.min(
+              matrix[i - 1][j - 1] + 1, // sustitución
+              Math.min(
+                matrix[i][j - 1] + 1,   // inserción
+                matrix[i - 1][j] + 1    // eliminación
+              )
+            );
+          }
+        }
+      }
+
+      return matrix[b.length][a.length];
+    }
+
+    /**
+     * Evalúa si una palabra buscada coincide de forma exacta o "difusa" (fuzzy) con alguna palabra de un texto.
+     */
+    function isFuzzyMatch(queryToken, targetTokens) {
+      // Coincidencia por subcadena exacta normalizada
+      if (targetTokens.some(token => token.includes(queryToken))) {
+        return true;
+      }
+
+      // Si la palabra de consulta es corta (<= 3 letras), requerimos coincidencia casi exacta
+      const maxDistance = queryToken.length > 5 ? 2 : (queryToken.length > 3 ? 1 : 0);
+      if (maxDistance === 0) return false;
+
+      // Comparación por distancia de Levenshtein contra cada token del texto
+      return targetTokens.some(token => {
+        // Optimización: Si la diferencia de longitud es mayor al límite, descartar
+        if (Math.abs(token.length - queryToken.length) > maxDistance) return false;
+        return levenshteinDistance(queryToken, token) <= maxDistance;
+      });
+    }
+
+    // Búsqueda inteligente en tiempo real
+    function handleSearch() {
+      const rawQuery = document.getElementById('searchInput').value;
+      const clearBtn = document.getElementById('clearSearchBtn');
+
+      if (rawQuery.trim().length > 0) {
+        clearBtn.classList.remove('hidden');
+      } else {
+        clearBtn.classList.add('hidden');
+        renderFAQs(faqList);
+        return;
+      }
+
+      const normalizedQuery = normalizeText(rawQuery);
+      const queryTokens = normalizedQuery.split(/\s+/).filter(t => t.length > 0);
+
+      if (queryTokens.length === 0) {
+        renderFAQs(faqList);
+        return;
+      }
+
+      // Filtrar y calcular puntaje para ordenar los mejores resultados primero
+      const results = [];
+
+      faqList.forEach(item => {
+        const normQ = normalizeText(item.question);
+        const normA = normalizeText(item.answer);
+        
+        const qTokens = normQ.split(/\s+/);
+        const aTokens = normA.split(/\s+/);
+        const allTokens = [...qTokens, ...aTokens];
+
+        let matchesCount = 0;
+
+        queryTokens.forEach(qToken => {
+          if (isFuzzyMatch(qToken, allTokens)) {
+            matchesCount++;
+          }
+        });
+
+        // Si al menos una palabra coincide o aproxima, incluir en los resultados
+        if (matchesCount > 0) {
+          // Puntaje simple: da prioridad a coincidencias en la pregunta vs respuesta
+          let score = matchesCount;
+          if (normQ.includes(normalizedQuery)) score += 5; // Coincidencia exacta de frase
+          results.push({ item, score });
+        }
+      });
+
+      // Ordenar por relevancia (puntaje más alto primero)
+      results.sort((a, b) => b.score - a.score);
+
+      renderFAQs(results.map(r => r.item));
+    }
+
+    function clearSearch() {
+      const input = document.getElementById('searchInput');
+      input.value = '';
+      handleSearch();
+      input.focus();
+    }
+
+    // Parser de CSV simple e intuitivo en JS
+    function importCSV(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const text = e.target.result;
+        try {
+          const parsedData = parseCSVText(text);
+          if (parsedData.length > 0) {
+            // Fusionar o reemplazar datos
+            faqList = [...parsedData, ...faqList];
+            saveData();
+            renderFAQs(faqList);
+            showToast(`¡Se importaron ${parsedData.length} preguntas!`, 'success');
+          } else {
+            showToast('No se encontraron columnas válidas (Pregunta / Respuesta)', 'error');
+          }
+        } catch (err) {
+          showToast('Error al leer el archivo CSV', 'error');
+        }
+        event.target.value = ''; // Reset file input
+      };
+      reader.readAsText(file);
+    }
+
+    // Función robusta para Parsear CSV
+    function parseCSVText(text) {
+      const lines = text.split(/\r\n|\n/);
+      if (lines.length < 2) return [];
+
+      // Detectar separador (coma o punto y coma)
+      const firstLine = lines[0];
+      const delimiter = (firstLine.match(/;/g) || []).length > (firstLine.match(/,/g) || []).length ? ';' : ',';
+
+      // Parsear encabezados
+      const headers = parseCSVLine(lines[0], delimiter).map(h => h.trim().toLowerCase());
+      
+      let qIndex = headers.findIndex(h => h.includes('pregunta') || h.includes('question') || h === 'q');
+      let aIndex = headers.findIndex(h => h.includes('respuesta') || h.includes('answer') || h === 'a');
+
+      // Si no encuentra por nombre, asumir columna 0 = Pregunta, columna 1 = Respuesta
+      if (qIndex === -1) qIndex = 0;
+      if (aIndex === -1) aIndex = 1;
+
+      const results = [];
+
+      for (let i = 1; i < lines.length; i++) {
+        if (!lines[i].trim()) continue;
+        const row = parseCSVLine(lines[i], delimiter);
+        
+        if (row[qIndex] && row[aIndex]) {
+          results.push({
+            id: Date.now().toString(36) + Math.random().toString(36).substr(2, 5),
+            question: row[qIndex].trim(),
+            answer: row[aIndex].trim()
+          });
+        }
+      }
+
+      return results;
+    }
+
+    // Parsea una línea de CSV respetando comillas
+    function parseCSVLine(line, delimiter) {
+      const values = [];
+      let currentValue = '';
+      let insideQuotes = false;
+
+      for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        if (char === '"' || char === "'") {
+          insideQuotes = !insideQuotes;
+        } else if (char === delimiter && !insideQuotes) {
+          values.push(currentValue.replace(/^["']|["']$/g, ''));
+          currentValue = '';
+        } else {
+          currentValue += char;
+        }
+      }
+      values.push(currentValue.replace(/^["']|["']$/g, ''));
+      return values;
+    }
+
+    // Exportar a CSV
+    function exportCSV() {
+      if (faqList.length === 0) {
+        showToast('No hay datos para exportar', 'error');
+        return;
+      }
+
+      let csvContent = 'Pregunta,Respuesta\n';
+      faqList.forEach(item => {
+        const q = `"${item.question.replace(/"/g, '""')}"`;
+        const a = `"${item.answer.replace(/"/g, '""')}"`;
+        csvContent += `${q},${a}\n`;
+      });
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', `wiki_preguntas_${new Date().toISOString().slice(0, 10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast('Archivo CSV exportado con éxito');
+    }
+
+    // Agregar Nueva Pregunta
+    function handleAddQuestion(e) {
+      e.preventDefault();
+      const qInput = document.getElementById('newQuestion');
+      const aInput = document.getElementById('newAnswer');
+
+      const newItem = {
+        id: Date.now().toString(36),
+        question: qInput.value.trim(),
+        answer: aInput.value.trim()
+      };
+
+      faqList.unshift(newItem);
+      saveData();
+      renderFAQs(faqList);
+
+      qInput.value = '';
+      aInput.value = '';
+      closeModal('addModal');
+      showToast('Pregunta agregada correctamente');
+    }
+
+    // Eliminar Pregunta
+    function deleteQuestion(id) {
+      faqList = faqList.filter(item => item.id !== id);
+      saveData();
+      renderFAQs(faqList);
+      showToast('Pregunta eliminada');
+    }
+
+    // Restaurar Datos
+    function resetDefaultData() {
+      if (confirm('¿Deseas restaurar las preguntas predeterminadas de ejemplo?')) {
+        faqList = [...initialData];
+        saveData();
+        renderFAQs(faqList);
+        showToast('Datos restaurados');
+      }
+    }
+
+    // Actualizar Contador
+    function updateTotalCount() {
+      document.getElementById('totalCount').textContent = `${faqList.length} ${faqList.length === 1 ? 'pregunta' : 'preguntas'}`;
+    }
+
+    // Modales
+    function openModal(id) {
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    // Modo Oscuro
+    function toggleDarkMode(force) {
+      const html = document.documentElement;
+      const icon = document.getElementById('themeIcon');
+      
+      if (force !== undefined) {
+        if (force) html.classList.add('dark');
+        else html.classList.remove('dark');
+      } else {
+        html.classList.toggle('dark');
+      }
+
+      if (html.classList.contains('dark')) {
+        icon.className = 'fa-solid fa-sun text-amber-300 text-sm';
+      } else {
+        icon.className = 'fa-solid fa-moon text-sm';
+      }
+    }
+
+    // Simulación Frame Móvil
+    function toggleMobileFrame() {
+      const app = document.getElementById('appContainer');
+      app.classList.toggle('max-w-md');
+      app.classList.toggle('sm:h-[844px]');
+      app.classList.toggle('sm:rounded-[40px]');
+      app.classList.toggle('sm:border-[8px]');
+    }
+
+    // Toast Notification
+    function showToast(msg, type = 'success') {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      const toastIcon = document.getElementById('toastIcon');
+
+      toastMsg.textContent = msg;
+      if (type === 'error') {
+        toastIcon.className = 'fa-solid fa-circle-exclamation text-rose-400';
+      } else {
+        toastIcon.className = 'fa-solid fa-check text-emerald-400';
+      }
+
+      toast.classList.remove('opacity-0', 'pointer-events-none');
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'pointer-events-none');
+      }, 2500);
+    }
+
+    // Reloj Simulado
+    function updateClock() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById('currentTime').textContent = `${hours}:${minutes}`;
+    }
+
+    // Utilidad Escape HTML
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+  </script>
+</body>
+</html>
