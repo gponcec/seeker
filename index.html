@@ -102,6 +102,9 @@
           <button onclick="openModal('addModal')" class="w-9 h-9 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors" title="Agregar pregunta">
             <i class="fa-solid fa-plus text-sm"></i>
           </button>
+          <button onclick="openModal('importCSVModal')" class="w-9 h-9 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors" title="Importar CSV">
+            <i class="fa-solid fa-file-csv text-emerald-600 dark:text-emerald-400"></i>            
+          </button>
         </div>
       </div>
 
@@ -128,17 +131,8 @@
           <i class="fa-solid fa-file-csv text-emerald-600 dark:text-emerald-400"></i>
           <span>Importar CSV</span>
           <input type="file" id="csvFileInput" accept=".csv" onchange="importCSV(event)" class="hidden">
-        </label>
-        
-        <button onclick="exportCSV()" class="bg-white dark:bg-slate-700 hover:bg-slate-100 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-600 flex items-center gap-1.5 font-medium transition-colors shadow-sm">
-          <i class="fa-solid fa-download text-blue-500"></i>
-          <span>Exportar</span>
-        </button>
+        </label>        
       </div>
-
-      <button onclick="resetDefaultData()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1.5" title="Restaurar datos de ejemplo">
-        <i class="fa-solid fa-rotate-right"></i>
-      </button>
     </div>
 
     <!-- Lista de Preguntas y Respuestas (Acordeón Scrollable) -->
@@ -154,23 +148,6 @@
       <h3 class="font-medium text-slate-700 dark:text-slate-200 mb-1">Sin resultados</h3>
       <p class="text-xs text-slate-500 dark:text-slate-400 max-w-[200px]" id="emptyStateText">No se encontraron preguntas que coincidan con la búsqueda.</p>
     </div>
-
-    <!-- Barra Inferior de Navegación Móvil -->
-    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 px-6 py-2 flex justify-around items-center shrink-0">
-      <button onclick="filterCategory('all')" id="navAll" class="flex flex-col items-center gap-0.5 text-brand-600 dark:text-brand-400 font-medium">
-        <i class="fa-solid fa-list-ul text-base"></i>
-        <span class="text-[10px]">Todas</span>
-      </button>
-      <button onclick="openModal('addModal')" class="flex flex-col items-center gap-0.5 text-slate-400 hover:text-brand-600 dark:hover:text-brand-400">
-        <i class="fa-solid fa-circle-plus text-base"></i>
-        <span class="text-[10px]">Nueva</span>
-      </button>
-      <button onclick="openModal('infoModal')" class="flex flex-col items-center gap-0.5 text-slate-400 hover:text-brand-600 dark:hover:text-brand-400">
-        <i class="fa-solid fa-circle-info text-base"></i>
-        <span class="text-[10px]">Info CSV</span>
-      </button>
-    </footer>
-
   </div>
 
   <!-- Modal: Agregar Nueva Pregunta -->
