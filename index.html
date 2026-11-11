@@ -230,7 +230,7 @@
     async function loadData() {
       try {
         // Realiza la petición para leer el archivo JSON de la misma carpeta
-        const response = await fetch('preguntas.json');
+        const response = await fetch('preguntas_frecuentes.json');
         if (!response.ok) {
           throw new Error('No se pudo cargar el archivo JSON');
         }
