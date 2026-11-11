@@ -18,11 +18,11 @@
         extend: {
           colors: {
             brand: {
-              50: '#f0f9ff',
-              100: '#e0f2fe',
-              500: '#0284c7',
-              600: '#0284c7',
-              700: '#0369a1',
+              50: '#fcf6f0',
+              100: '#f7ebd9',
+              500: '#d47f2b', // Nuevo color principal
+              600: '#d47f2b', // Nuevo color principal
+              700: '#b3631b', // Tono oscuro para hover
             }
           },
           fontFamily: {
@@ -51,15 +51,15 @@
       background: transparent;
     }
     .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: rgba(156, 163, 175, 0.4);
+      background: rgba(212, 127, 43, 0.4);
       border-radius: 4px;
     }
   </style>
 </head>
-<body class="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-sans min-h-screen flex flex-col items-center justify-center p-0 sm:p-4 transition-colors duration-200">
+<body class="bg-stone-100 dark:bg-stone-900 text-stone-800 dark:text-stone-100 font-sans min-h-screen flex flex-col items-center justify-center p-0 sm:p-4 transition-colors duration-200">
 
   <!-- Switch de Simulación de Dispositivo (Solo visible en pantallas medianas/grandes) -->
-  <div class="hidden sm:flex items-center gap-4 mb-4 bg-white dark:bg-slate-800 px-4 py-2 rounded-full shadow-sm text-sm border border-slate-200 dark:border-slate-700">
+  <div class="hidden sm:flex items-center gap-4 mb-4 bg-white dark:bg-stone-800 px-4 py-2 rounded-full shadow-sm text-sm border border-stone-200 dark:border-stone-700">
     <span class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Modo de vista:</span>
     <button id="toggleFrameBtn" onclick="toggleMobileFrame()" class="flex items-center gap-2 text-brand-600 dark:text-brand-400 font-medium hover:underline">
       <i class="fa-solid fa-mobile-screen"></i> <span>Cambiar Marco Móvil / Pantalla Completa</span>
@@ -67,7 +67,7 @@
   </div>
 
   <!-- Contenedor Principal / Marco de Teléfono Celular -->
-  <div id="appContainer" class="w-full max-w-md bg-white dark:bg-slate-800 sm:rounded-[40px] shadow-2xl border-0 sm:border-[8px] border-slate-800 dark:border-slate-700 h-screen sm:h-[844px] flex flex-col overflow-hidden relative transition-all duration-300">
+  <div id="appContainer" class="w-full max-w-md bg-white dark:bg-stone-800 sm:rounded-[40px] shadow-2xl border-0 sm:border-[8px] border-slate-800 dark:border-slate-700 h-screen sm:h-[844px] flex flex-col overflow-hidden relative transition-all duration-300">
     
     <!-- Barra del Sistema Móvil (Notch & Status bar simulation) -->
     <div class="bg-brand-600 dark:bg-slate-900 text-white px-6 pt-3 pb-2 flex justify-between items-center text-xs font-semibold shrink-0 select-none">
@@ -121,7 +121,7 @@
           id="searchInput" 
           placeholder="Buscar pregunta o palabra clave..." 
           oninput="handleSearch()"
-          class="w-full pl-10 pr-9 py-2.5 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 placeholder-slate-400 rounded-xl text-sm outline-none focus:ring-2 focus:ring-white/50 shadow-inner transition-all"
+          class="w-full pl-10 pr-9 py-2.5 bg-white dark:bg-stone-800 text-slate-800 dark:text-slate-100 placeholder-slate-400 rounded-xl text-sm outline-none focus:ring-2 focus:ring-white/50 shadow-inner transition-all"
         />
         <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
           <i class="fa-solid fa-xmark text-sm"></i>
@@ -146,7 +146,7 @@
 
   <!-- Modal: Agregar Nueva Pregunta -->
   <div id="addModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white dark:bg-slate-800 w-full max-w-sm rounded-2xl p-5 shadow-2xl border border-slate-200 dark:border-slate-700 transform transition-all">
+    <div class="bg-white dark:bg-stone-800 w-full max-w-sm rounded-2xl p-5 shadow-2xl border border-stone-200 dark:border-stone-700 transform transition-all">
       <div class="flex justify-between items-center mb-4">
         <h3 class="font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
           <i class="fa-solid fa-plus-circle text-brand-600"></i> Agregar Pregunta
@@ -174,7 +174,7 @@
 
   <!-- Modal: Información y Formato CSV -->
   <div id="infoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white dark:bg-slate-800 w-full max-w-sm rounded-2xl p-5 shadow-2xl border border-slate-200 dark:border-slate-700">
+    <div class="bg-white dark:bg-stone-800 w-full max-w-sm rounded-2xl p-5 shadow-2xl border border-stone-200 dark:border-stone-700">
       <div class="flex justify-between items-center mb-3">
         <h3 class="font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
           <i class="fa-solid fa-file-csv text-emerald-500"></i> Formato de CSV
@@ -267,7 +267,7 @@
 
       items.forEach((item, index) => {
         const card = document.createElement('div');
-        card.className = 'bg-white dark:bg-slate-700/60 rounded-xl border border-slate-200/80 dark:border-slate-700/80 shadow-sm overflow-hidden transition-all duration-200 hover:border-brand-300 dark:hover:border-slate-600';
+        card.className = 'bg-white dark:bg-stone-700/60 rounded-xl border border-slate-200/80 dark:border-slate-700/80 shadow-sm overflow-hidden transition-all duration-200 hover:border-brand-300 dark:hover:border-slate-600';
         
         card.innerHTML = `
           <button onclick="toggleAccordion('${item.id}')" class="w-full p-3.5 text-left flex justify-between items-start gap-3 select-none">
