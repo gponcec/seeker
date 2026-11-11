@@ -89,7 +89,7 @@
             <i class="fa-solid fa-book-open text-lg"></i>
           </div>
           <div>
-            <h1 class="font-bold text-lg leading-tight">Preguntas frecuentes</h1>
+            <h1 class="font-bold text-lg leading-tight">Wiki Edifica</h1>
             <p class="text-[11px] text-brand-100 opacity-90" id="totalCount">0 preguntas cargadas</p>
           </div>
         </div>
@@ -208,225 +208,14 @@
   <!-- JavaScript Logic -->
   <script>
     // Preguntas iniciales predeterminadas
-    const initialData = [
-    {
-		"id": '1',
-        "question": "¿Cuál es la empresa administradora y desde cuándo se paga mantenimiento?",
-        "answer": "La empresa administradora es ADMINISTRA LIVING. La cuota de mantenimiento se calcula desde la entrega de la unidad, y junto con ella se entrega la cartilla informativa con los contactos de la empresa. Ellos también orientan sobre el proceso de mudanza y el uso de áreas comunes. El costo aproximado de la cuota de mantenimiento es de S/ 4.90 por m².",
-        "project": "Ambos"
-    },
-    {
-		"id": '2',
-        "question": "El departamento tiene tomacorrientes de tres puntos circulares, ¿por qué?",
-        "answer": "Responde a la normativa vigente, que busca uniformizar los tomacorrientes en las construcciones. En la medida de lo posible, se han instalado tomacorrientes de uso mixto; para un aprovechamiento completo, recomendamos adaptadores de calidad, disponibles en tiendas como Sodimac o Promart.",
-        "project": "Ambos"
-    },
-    {
-		"id": '3',
-        "question": "El departamento no tiene luminarias, ¿es normal?",
-        "answer": "Sí, el proyecto no las contempla dentro de los ambientes interiores; solo se instalan en balcones y terrazas para homogenizar la fachada y las áreas comunes. La elección del tipo de luminaria (larga, corta, de color) es una decisión muy personal, por lo que dejamos todas las conexiones listas para que cualquier electricista de su confianza pueda instalarlas a su gusto.",
-        "project": "Ambos"
-    },
-    {
-		"id": '4',
-        "question": "El departamento no tiene muebles ni cristales en las duchas, ¿por qué?",
-        "answer": "El proyecto no lo contempla dentro del alcance de entrega. Para facilitar el proceso, Edifica remite por correo electrónico los planos con las medidas exactas, de modo que el propietario pueda mandarlos a confeccionar a su gusto de forma sencilla.",
-        "project": "Ambos"
-    },
-    {
-		"id": '5',
-        "question": "¿Qué operador de servicios de comunicaciones llega al edificio?",
-        "answer": "El edificio cuenta con 6 meses de internet gratuito en áreas comunes gestionado por la administración, brindado por la empresa WIN. Para el departamento, el propietario es libre de elegir el operador de su preferencia.",
-        "project": "Ambos"
-    },
-    {
-		"id": '6',
-        "question": "¿El edificio es sismorresistente?",
-        "answer": "Sí. El edificio ha sido diseñado y construido conforme al Reglamento Nacional de Edificaciones y a la normativa técnica vigente, incluyendo la Norma Técnica E.030 de Diseño Sismorresistente, cumpliendo los criterios establecidos para un adecuado nivel de seguridad estructural.",
-        "project": "Ambos"
-    },
-    {
-		"id": '7',
-        "question": "¿Mi piso es resistente al agua?",
-        "answer": "El piso instalado es SPC (Stone Plastic Composite), tal como figura en la minuta de compraventa. Tiene una mayor resistencia a la humedad frente a otros acabados, aunque no es 100% impermeable, por lo que se recomiendan los cuidados habituales.",
-        "project": "Ambos"
-    },
-    {
-		"id": '8',
-        "question": "Los baños no tienen llave, ¿por qué?",
-        "answer": "Es una decisión de seguridad: el baño es un espacio donde ingresamos solos, y ante cualquier eventualidad debe poder abrirse desde fuera. Puede colocarle un seguro interior y abrirse con cualquier llave en caso de emergencia.",
-        "project": "Ambos"
-    },
-    {
-		"id": '9',
-        "question": "La cocina tiene pocos tomacorrientes, ¿es suficiente?",
-        "answer": "Es un tema de uso cotidiano: normalmente los electrodomésticos no permanecen enchufados todo el día (licuadora, hornito, wafflera, cuchillo eléctrico), por lo que contamos con reposteros altos y bajos para guardarlos. El microondas, que sí requiere uso constante, cuenta con su propio tomacorriente dedicado.",
-        "project": "Ambos"
-    },
-    {
-		"id": '10',
-        "question": "¿Qué son esas líneas en la pared?",
-        "answer": "Se llaman bruñas y se colocan en los puntos donde cambia el tipo de material del muro. Cumplen una función estructural: evitan que el muro se fisure ante el movimiento sísmico habitual de la ciudad.",
-        "project": "Ambos"
-    },
-    {
-		"id": '11',
-        "question": "¿Se puede retirar la luz estroboscópica?",
-        "answer": "No, por un tema de seguridad. Forma parte del sistema de alarma contraincendios, que permite una evacuación oportuna ante cualquier eventualidad. Retirarla incrementaría el tiempo de reacción ante una emergencia.",
-        "project": "Ambos"
-    },
-    {
-		"id": '12',
-        "question": "¿De quién son las lavadoras y secadoras de las áreas comunes?",
-        "answer": "El espacio pertenece a la junta de propietarios, pero ha sido dado en concesión a la empresa PRONTOMATIC, especializada en equipos de lavandería. Esto evita que los propietarios asuman el mantenimiento de dichos equipos: solo se paga por el uso de las máquinas cuando se requieran.",
-        "project": "Ambos"
-    },
-    {
-		"id": '13',
-        "question": "¿Quiénes pueden usar las áreas comunes sociales?",
-        "answer": "Todos los propietarios, tanto de Francisco del Castillo como de Urban Heights, ya que el pago de administración incluye el mantenimiento y la conservación de estos espacios. Su uso está sujeto a reserva y al pago de garantías, conforme a lo especificado por la administración del edificio.",
-        "project": "Ambos"
-    },
-    {
-		"id": '14',
-        "question": "Soy propietario del lado de Francisco del Castillo, ¿cómo accedo a las áreas comunes sociales de Urban Heights?",
-        "answer": "Con el propósito de preservar la tranquilidad, privacidad y exclusividad de los residentes de ambos edificios, el acceso a las zonas comunes sociales de Urban Heights se realiza de manera independiente a través del Sótano 1, utilizando los ascensores exclusivos correspondientes. Esta solución garantiza una adecuada convivencia y mantiene la experiencia residencial de ambos proyectos.",
-        "project": "Francisco del Castillo"
-    },
-    {
-		"id": '15',
-        "question": "¿Ya existe una junta directiva electa?",
-        "answer": "Sí. Cada edificio cuenta con su propia Junta Directiva, integrada por tres miembros elegidos por sus respectivos propietarios. Adicionalmente, existe una Junta Directiva General conformada por dos miembros de Urban Heights y un miembro de Francisco del Castillo, que representa los intereses comunes de la copropiedad en la administración general.",
-        "project": "Ambos"
-    },
-    {
-		"id": '16',
-        "question": "¿Los impuestos arbitrios y prediales están cancelados?",
-        "answer": "El impuesto predial del año está cancelado; sin embargo, cuando las unidades estén independizadas (aprox. dentro de 15 meses), cada propietario deberá cancelar los impuestos de su unidad. En el caso de arbitrios, se podrían cobrar de manera retroactiva desde el momento de su entrega.",
-        "project": "Ambos"
-    },
-    {
-		"id": '17',
-        "question": "¿Cuál es la marca de ascensores?",
-        "answer": "Se han considerado ascensores de marca Powertech-Triaon, con capacidad de 8 personas por equipo; sin embargo, para un viaje más placentero y cómodo se recomienda el ingreso de 6 personas.",
-        "project": "Ambos"
-    },
-    {
-		"id": '18',
-        "question": "Por qué hay retrasos en el levantamiento de observaciones del acta de entrega?",
-        "answer": "Al inicio del proceso de entregas se registró un incremento significativo de observaciones, formuladas por propietarios que contrataron empresas revisoras externas. En muchos departamentos convencionales se llegó a triplicar la cantidad de observaciones prevista, y una parte importante no contaba con sustento técnico suficiente. Pese a haber duplicado los equipos de Servicio al Cliente y Postventa, hoy se presentan retrasos de aproximadamente 2 a 3 semanas en la atención de algunos departamentos.",
-        "project": "Ambos"
-    },
-    {
-		"id": '19',
-        "question": "¿Edifica atiende las observaciones formuladas por empresas revisoras externas?",
-        "answer": "Sí. Ante la ausencia de un mecanismo legal que permita homologar criterios entre empresas revisoras, Edifica decidió atender las observaciones identificadas, priorizando su revisión y validación técnica.",
-        "project": "Ambos"
-    },
-    {
-		"id": '20',
-        "question": "¿Las observaciones del acta de entrega impiden usar el departamento?",
-        "answer": "No, por sí mismas no impiden el uso de la unidad, salvo que exista alguna condición técnica específica que determine lo contrario.",
-        "project": "Ambos"
-    },
-    {
-		"id": '21',
-        "question": "¿El proyecto cuenta con certificado de conformidad de las redes internas de gas?",
-        "answer": "Sí. En julio el proyecto obtuvo el certificado de conformidad de las redes internas de gas emitido por Calidda, lo que permitió decidir el inicio de las entregas.",
-        "project": "Ambos"
-    },
-    {
-		"id": '22',
-        "question": "¿Quién realiza la conexión del gas en cada departamento?",
-        "answer": "Cada propietario contrata el servicio directamente con Calidda. Calidda designó a la empresa Alfaco para ejecutar las conexiones y mediciones en cada unidad, como parte de sus protocolos.",
-        "project": "Ambos"
-    },
-    {
-		"id": '23',
-        "question": "¿Qué equipo de agua caliente corresponde a cada torre?",
-        "answer": "Según la configuración confirmada por Calidda: Torres A y B, terma de tipo A; Torre C, termotanque. Edifica no recomienda marcas.",
-        "project": "Ambos"
-    },
-    {
-		"id": '24',
-        "question": "¿Por qué se están modificando las puertas de lavandería?",
-        "answer": "En las inspecciones individuales, Alfaco observó niveles de monóxido asociados al tipo de terma indicado por Calidda, lo que exige mayor ventilación natural en algunas lavanderías. Calidda remitió indicaciones técnicas nuevas para adecuar las puertas y garantizar las condiciones requeridas para habilitar el suministro.",
-        "project": "Urban Heights"
-    },
-    {
-		"id": '25',
-        "question": "¿Qué adecuación se realizará en mi departamento?",
-        "answer": "Varía según la tipología: en algunos casos se retira una tapa superior y en otros se modifica la puerta de lavandería con más rejillas de ventilación.",
-        "project": "Urban Heights"
-    },
-    {
-		"id": '26',
-        "question": "¿Quién asume el costo de las adecuaciones?",
-        "answer": "Edifica asume las adecuaciones. Solo se requiere el tiempo necesario para ejecutarlas de manera organizada.",
-        "project": "Urban Heights"
-    },
-    {
-		"id": '27',
-        "question": "¿Cómo agendo la adecuación de mi puerta de lavandería?",
-        "answer": "Edifica envió a cada propietario un enlace para agendar virtualmente su atención.",
-        "project": "Urban Heights"
-    },
-    {
-		"id": '28',
-        "question": "¿Qué acciones ha tomado Edifica sobre el suministro de gas?",
-        "answer": "Se enviaron cuatro comunicados masivos a los propietarios de Urban, se compartieron avances y acciones con la Junta Directiva, se coordinaron recursos y contratistas para atender las adecuaciones de forma masiva, se habilitó un enlace de agendamiento y se propuso una reunión informativa con la Junta de Propietarios para el viernes 18 de septiembre.",
-        "project": "Urban Heights"
-    },
-    {
-		"id": '29',
-        "question": "¿Edifica siempre supo que era necesario incrementar el área de ventilación de las lavanderías?",
-        "answer": "No. Las indicaciones relacionadas con el incremento del área de ventilación fueron comunicadas durante el proceso de habilitación individual del suministro de gas. Calidda y Osinergmin son entidades independientes, con competencias y actuaciones diferenciadas dentro del proceso de habilitación y supervisión del servicio, por lo que estas exigencias pueden cambiar con el tiempo.",
-        "project": "Urban Heights"
-    },
-    {
-		"id": '30',
-        "question": "¿Existe alguna alternativa que evite modificar las puertas de lavandería?",
-        "answer": "De acuerdo con las indicaciones técnicas comunicadas por Calidda, se requiere garantizar una mayor ventilación natural, es decir, una renovación de aire proveniente del exterior. Por ello, las adecuaciones en las puertas constituyen la única solución viable que se viene implementando para atender las condiciones indicadas.",
-        "project": "Urban Heights"
-    },
-    {
-		"id": '31',
-        "question": "¿El ducto que colinda con la lavandería en algunas tipologías podría utilizarse para ventilar este ambiente?",
-        "answer": "No. La existencia de un ducto no garantiza, por sí sola, la renovación de aire necesaria para cumplir con las condiciones de ventilación natural requeridas, sobre todo en un ducto de más de 20 pisos. Asimismo, cualquier solución de ventilación debe cumplir con las condiciones técnicas exigidas por Osinergmin para la habilitación del suministro de gas.",
-        "project": "Urban Heights"
-    },
-    {
-		"id": '32',
-        "question": "¿Cuánto tiempo tomará realizar las adecuaciones en las puertas?",
-        "answer": "Los trabajos se han programado para ejecutarse durante un periodo estimado de tres semanas, contadas desde el 15 de septiembre. Este plazo podrá variar según la tipología del departamento, la programación de las atenciones y las condiciones de ejecución de cada intervención.",
-        "project": "Urban Heights"
-    },
-    {
-		"id": '33',
-        "question": "¿Servicio al Cliente no atiende las consultas sobre este punto?",
-        "answer": "El mensaje que venimos dando es el mismo que compartimos: no podemos brindar otras alternativas porque no están aprobadas por Calidda. Tampoco podríamos dar fechas porque recientemente se cerraron los acuerdos con los proveedores que harán estos cambios; desde el martes 22 se contará con fechas certeras.",
-        "project": "Urban Heights"
-    },
-    {
-		"id": '34',
-        "question": "¿Calidda no atiende el resto de las unidades que no presentan inconvenientes?",
-        "answer": "Calidda indicó que sigue firmando contratos; sin embargo, el reinicio del suministro aún está siendo evaluado por Calidda y se espera que se reinicie esta semana. Calidda es autónoma en sus decisiones.",
-        "project": "Ambos"
-    },
-    {
-		"id": '35',
-        "question": "¿Dónde debo validar la información sobre el suministro de gas?",
-        "answer": "Solo a través de los canales oficiales de Edifica y Calidda. Un mensaje de WhatsApp de un técnico de Calidda o Alfaco không constituye información formal.",
-        "project": "Ambos"
-    }		
-    ];
+    const initialData = [];
 
     let faqList = [];
     let activeAccordion = null;
 
-    // Inicialización
-    document.addEventListener('DOMContentLoaded', () => {
-      loadData();
+    // Inicialización modificada para usar async/await
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadData();
       updateClock();
       setInterval(updateClock, 30000);
       
@@ -436,21 +225,22 @@
       }
     });
 
-    // Cargar Datos (LocalStorage o Default)
-    function loadData() {
-      const saved = localStorage.getItem('wiki_faq_data');
-      if (saved) {
-        try {
-          faqList = JSON.parse(saved);
-        } catch (e) {
-          faqList = [...initialData];
+
+    // Cargar Datos desde el archivo JSON externo
+    async function loadData() {
+      try {
+        // Realiza la petición para leer el archivo JSON de la misma carpeta
+        const response = await fetch('preguntas.json');
+        if (!response.ok) {
+          throw new Error('No se pudo cargar el archivo JSON');
         }
-      } else {
-        faqList = [...initialData];
-        saveData();
+        faqList = await response.json();
+      } catch (error) {
+        console.error('Error cargando las preguntas:', error);
+        faqList = []; // Lista vacía en caso de error
       }
       renderFAQs(faqList);
-    }
+    }    
 
     // Guardar en LocalStorage
     function saveData() {
